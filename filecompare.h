@@ -24,7 +24,7 @@ class Folders : public QObject
 {
     Q_OBJECT
     Q_PROPERTY(QStringList inputFolders READ inputFolders WRITE setInputFolders NOTIFY inputFoldersChanged)
-    Q_PROPERTY(QStringList outputFolders READ outputFolders WRITE setOutputFolders NOTIFY outputFoldersChanged)
+    Q_PROPERTY(QStringList outputFolders READ outputFolders NOTIFY outputFoldersChanged)
 
 public:
     QStringList inputFolders() const;
@@ -35,13 +35,14 @@ public:
 
 public slots:
     void setInputFolders(const QStringList& inputFolders);
-    void setOutputFolders(const QStringList& outputFolders);
 
 signals:
     void inputFoldersChanged(const QStringList& outputFolders);
     void outputFoldersChanged(const QStringList& outputFolders);
 
 private:
+    void setOutputFolders(const QStringList& outputFolders);
+
     QStringList m_inputFolders;
     QStringList m_outputFolders;
 };

@@ -3,38 +3,41 @@ import QtQuick 2.12
 Item {
     id: root
 
-    property bool expanded: false
-    property real margin: 10
     property alias model: listView.model
     property alias delegate: listView.delegate
 
-    implicitHeight: expanded ? listView.contentHeight + root.margin : expander.implicitHeight + root.margin
+    Internal {
+        id: internal
+        property bool expanded: false
+    }
+
+    implicitHeight: internal.expanded ? listView.contentHeight + Global.margin : expander.implicitHeight + Global.margin
 
     Rectangle {
         id: expander
 
-        color: "white"
+        color: Global.colors.white
         anchors {
             top: parent.top
             left: parent.left
         }
 
-        implicitHeight: expanded ? listView.contentHeight : root.margin
-        width: root.margin
+        implicitHeight: internal.expanded ? listView.contentHeight : Global.margin
+        width: Global.margin
 
         MouseArea {
             anchors.fill: parent
-            onClicked: root.expanded = !root.expanded
+            onClicked: internal.expanded = !internal.expanded
         }
     }
 
     ListView {
         id: listView
-        visible: expanded
+        visible: internal.expanded
         anchors {
             top: parent.top
             left: expander.right
-            leftMargin: root.margin
+            leftMargin: Global.margin
             right: parent.right
         }
         height: contentHeight

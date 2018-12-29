@@ -4,5 +4,10 @@
         <file>qtquickcontrols2.conf</file>
         <file>CompareView.qml</file>
         <file>TreeViewEntry.qml</file>
+        <file>FilesToFolders.qml</file>
+        <file>Spacer.qml</file>
+        <file>Internal.qml</file>
+        <file>Global.qml</file>
+        <file>qmldir</file>
     </qresource>
 </RCC>

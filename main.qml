@@ -4,14 +4,19 @@ import QtQuick.Controls 2.12
 ApplicationWindow {
     id: root
     visible: true
-    width: 1024
-    height: 720
+    width: 800
+    height: 600
 
     property var model: [
         {
-            'name': "Compare",
+            'name': "File Compare",
             'view': compareView
+        },
+        {
+            'name': "Files to Folders",
+            'view': filesToFoldersView
         }
+
     ]
 
     ListView {
@@ -32,17 +37,35 @@ ApplicationWindow {
         }
     }
 
+    Spacer {
+        id: spacer
+        anchors {
+            top: parent.top
+            left: sidebar.right
+        }
+        orientation: Spacer.Orientation.Vertical
+        height: parent.height
+    }
+
     StackView {
         id: stackView
         anchors {
             top: parent.top
-            left: sidebar.right
+            left: spacer.right
+            leftMargin: Global.margin
             right: parent.right
             bottom: parent.bottom
         }
+        replaceEnter: Transition {}
+        replaceExit: Transition {}
 
         CompareView {
             id: compareView
+            visible: false
+        }
+
+        FilesToFolders {
+            id: filesToFoldersView
             visible: false
         }
     }

@@ -4,113 +4,132 @@ import QtQuick.Controls.Material 2.4
 import QtQuick.Dialogs 1.3
 import io.brataas.filetools 1.0
 
-Item {
+Column {
     Label {
         id: title
-        anchors {
-            top: parent.top
-            left: parent.left
-            right: parent.right
-        }
         text: "File Compare"
-        font.pointSize: 24
+        font.pointSize: Global.font.pointSize.h1
     }
 
-    Row {
-        id: row
+    Column {
+        spacing: Global.spacing
+        height: parent.height - title.height
 
-        property var folders: []
+        Row {
+            id: row
+            spacing: Global.spacing
 
-        anchors {
-            top: title.bottom
-            left: parent.left
-        }
-        spacing: 10
-        width: parent.width * 0.5
+            Button {
+                text: "Browse.."
+                onClicked: fileDialog.open()
+            }
 
-        Button {
-            text: "Browse.."
-            onClicked: fileDialog.open()
-        }
+            TextField {
+                id: filter
+                placeholderText: "filter"
+            }
 
-        Button {
-            text: "Clear"
-            onClicked: {
-                folders.clear()
-                fileList.clear()
-                fileCompare.clear()
+            Button {
+                text: "Compare"
+                onClicked: {
+                    fileList.build(folders.inputFolders)
+                    fileCompare.compare(fileList.files)
+                }
+            }
+
+            Button {
+                text: "Clear"
+                onClicked: {
+                    folders.clear()
+                    fileList.clear()
+                    fileCompare.clear()
+                }
+            }
+
+            ProgressBar {
+                from: 0
+                to: 100
+                value: fileCompare.progress
+                anchors.verticalCenter: parent.verticalCenter
             }
         }
 
-        Button {
-            text: "Compare"
-            onClicked: {
-                fileList.build(folders.inputFolders)
-                fileCompare.compare(fileList.files)
-            }
-        }
+        Row {
+            height: parent.height
+            spacing: Global.spacing
 
-        TextField {
-            id: filter
-            placeholderText: "filter"
-        }
+            Column {
+                spacing: Global.spacing
 
-        ProgressBar {
-            from: 0
-            to: 100
-            value: fileCompare.progress
-            anchors.verticalCenter: parent.verticalCenter
-            Material.accent: Material.Purple
-        }
-    }
+                Label {
+                    text: "Extensions found"
+                    font.pointSize: Global.font.pointSize.h3
+                }
 
-    ListView {
-        id: extensionsListView
-        anchors {
-            top: row.bottom
-            left: parent.left
-            bottom: parent.bottom
-        }
-        model: fileList.extensions
-        delegate: Text {
-            text: modelData
-            color: "white"
-        }
-        width: 100
-    }
-
-    ListView {
-        id: foldersListView
-        anchors {
-            top: row.bottom
-            left: extensionsListView.right
-            bottom: parent.bottom
-        }
-        width: (parent.width - extensionsListView.width) * 0.5
-        model: folders.inputFolders
-        delegate: Text {
-            text: modelData
-            color: "white"
-        }
-    }
-
-    ListView {
-        id: duplicateFilesListView
-        anchors {
-            top: row.bottom
-            left: foldersListView.right
-            right: parent.right
-            bottom: parent.bottom
-        }
-        model: fileCompare.duplicateFiles
-        delegate: TreeViewEntry {
-            width: parent.width
-            delegate: Text {
-                text: modelData
-                color: "white"
+                ListView {
+                    id: extensionsListView
+                    implicitHeight: Math.max(Math.min(contentHeight, 400), 1)
+                    implicitWidth: 150
+                    model: fileList.extensions
+                    delegate: Text {
+                        text: modelData
+                        color: Global.colors.white
+                    }
+                }
             }
 
-            model: FileType
+            Spacer {
+                orientation: Spacer.Orientation.Vertical
+                height: parent.height
+            }
+
+            Column {
+                spacing: Global.spacing
+
+                Label {
+                    text: "Folders to compare content"
+                    font.pointSize: Global.font.pointSize.h3
+                }
+                ListView {
+                    id: foldersListView
+                    implicitHeight: Math.max(Math.min(contentHeight, 400), 1)
+                    implicitWidth: 250
+                    model: folders.inputFolders
+                    delegate: Text {
+                        text: modelData
+                        color: Global.colors.white
+                    }
+                }
+            }
+
+            Spacer {
+                orientation: Spacer.Orientation.Vertical
+                height: parent.height
+            }
+
+            Column {
+                spacing: Global.spacing
+
+                Label {
+                    text: "Duplicate content"
+                    font.pointSize: Global.font.pointSize.h3
+                }
+                ListView {
+                    id: duplicateFilesListView
+                    implicitHeight: Math.max(Math.min(contentHeight, 400), 1)
+                    implicitWidth: 250
+                    model: fileCompare.duplicateFiles
+                    delegate: TreeViewEntry {
+                        width: parent.width
+                        delegate: Text {
+                            text: modelData
+                            color: Global.colors.white
+                        }
+
+                        model: FileType
+                    }
+                }
+            }
         }
     }
 
