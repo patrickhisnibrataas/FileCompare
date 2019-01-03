@@ -4,6 +4,7 @@
 #include <QObject>
 #include "filecompare.h"
 #include "enums.h"
+#include <optional>
 
 class SortFilesToFolders : public QObject
 {
